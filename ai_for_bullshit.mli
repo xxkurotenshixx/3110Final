@@ -3,3 +3,11 @@
   *)
 
 val bullshit_caller: unit -> bool
+
+
+(*[play_card i] takes in the previously played card in int format and the AI then
+  decides which card(s) to play next
+*)
+
+val play_card: int -> 'a list
+
