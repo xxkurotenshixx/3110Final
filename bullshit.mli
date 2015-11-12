@@ -1,9 +1,4 @@
 
-(**
-  * [parse] runs the game
-  *
-  *)
-val parse : unit -> bool
 
 (**
   * [game_start]
@@ -17,7 +12,19 @@ val game_start : unit ->
   *
   * The player begins with a betted amount. It returns true if the game is won.
   *)
-val run : int -> bool
+val run : int -> int
+
+(**
+  * [decision]
+  *)
+
+val decision: unit -> bool
+
+(*'a list is a list of cards *)
+(*[play_card i] takes in the previously played card in int format and returns
+a list of a cards*)
+val play_card: int -> 'a list
+
 
 
 (**
