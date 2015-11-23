@@ -6,20 +6,14 @@ exception Empty
 
 let empty = []
 
+let suit_list = [Spades;Hearts;Diamonds;Clubs]
+let rank_list = [Two;Three;Four;Five;Six;Seven;Eight;Nine;Ten;Jack;Queen;
+                 King;Ace]
+let form_pairs lst1 lst2 =
+  List.fold_right (fun x acc -> (List.map (fun y -> (x,y)) lst2) @ acc) lst1 []
+
 let new_deck =
-  [(Spades,Two);(Spades,Three);(Spades,Four);(Spades,Five);(Spades,Six);
-   (Spades,Seven);(Spades,Eight);(Spades,Nine);(Spades,Ten);(Spades,Jack);
-   (Spades,Queen);(Spades,King);(Spades,Ace);
-   (Hearts,Two);(Hearts,Three);(Hearts,Four);(Hearts,Five);(Hearts,Six);
-   (Hearts,Seven);(Hearts,Eight);(Hearts,Nine);(Hearts,Ten);(Hearts,Jack);
-   (Hearts,Queen);(Hearts,King);(Hearts,Ace);
-   (Diamonds,Two);(Diamonds,Three);(Diamonds,Four);(Diamonds,Five);
-   (Diamonds,Six);(Diamonds,Seven);(Diamonds,Eight);(Diamonds,Nine);
-   (Diamonds,Ten);(Diamonds,Jack);(Diamonds,Queen);(Diamonds,King);
-   (Diamonds,Ace);
-   (Clubs,Two);(Clubs,Three);(Clubs,Four);(Clubs,Five);(Clubs,Six);
-   (Clubs,Seven);(Clubs,Eight);(Clubs,Nine);(Clubs,Ten);(Clubs,Jack);
-   (Clubs,Queen);(Clubs,King);(Clubs,Ace)]
+  form_pairs suit_list rank_list
 
 let new_double_deck =
   new_deck @ new_deck

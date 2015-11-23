@@ -15,7 +15,8 @@ val new_deck: deck
 val new_double_deck: deck
 
 (*picks a card randomly from the deck
-  returns the card paired with the deck with that card removed*)
+  returns the card paired with the deck with that card removed
+  Raises Empty if there are no cards in the deck *)
 val draw: deck -> card * deck
 
 (*returns the size of the list of cards*)
