@@ -1,13 +1,13 @@
-module Card = sig
-  (*used to represent card suits*)
-  type suit = Hearts | Diamonds | Spades | Clubs
-  (*a card represented by a suit and a number
-    1 -> A, 11 -> J, 12 -> Q, 13 -> K        *)
-  type card = suit * int
+(*used to represent card suits*)
+type suit = Spades | Diamonds | Hearts | Clubs
+(*used to represent card rank*)
+type rank = Two | Three | Four | Five | Six | Seven | Eight | Nine |
+            Ten | Jack | Queen | King | Ace
+(*a card represented by a suit and a rank*)
+type card = suit * rank
 
-  (*returns a string representation of the card*)
-  val card_to_string: card -> string
+(*returns a string representation of the card*)
+val card_to_string: card -> string
 
-  (*takes two cards and returns whether they have the same number*)
-  val same_number: card -> card -> bool
-end
+(*takes two cards and returns whether they have the same number*)
+val same_number: card -> card -> bool
