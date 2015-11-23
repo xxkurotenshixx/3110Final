@@ -85,7 +85,8 @@ let rec run score =
   let input = parse_input in
   match input with
   | Game 0 -> let _ = print_string
-          "You can \"play blackjack\", \"play bull shit\", or \"play go fish\"\n\n" in
+          "You can \"play blackjack\", \"play bull shit\", or
+          \"play go fish\"\n\n" in
           run new_score
   | Game 1 -> let new_score = Blackjack.run score in
         let _ = print_string "Welcome back to the lobby \n\n" in
@@ -106,38 +107,46 @@ let rec run score =
           score
         else
           run score
-  | Help   -> let _ = print_string "You ask a passerby for help. He seems a bit miffed, his pockets empty,
-                    but he decided to tell you a thing or two about making it here in Camllot\n\n
-                    play: \"try your luck and play a game\"\n
+  | Help   -> let _ = print_string "You ask a passerby for help.
+                    He seems a bit miffed, his pockets empty,
+                    but he decided to tell you a thing or two about making it
+                    here in Camllot\n\n play: \"try your luck and play a game\"\n
                       play (blackjack || bull shit || go fish)
                     check: \"check your pockets, see how much change you got\"\n
                     quit: \"cash in your money and git gone\"\n
                     help: \"your looking at it\"\n\n" in
         run score
-  | Nul    -> let _ = print_string "You might want to type something. Type in \"help\" to ask for help.\n\n" in
+  | Nul    -> let _ = print_string "You might want to type something.
+                      Type in \"help\" to ask for help.\n\n" in
         run score
   | Confirm x  -> if x then
-            let _ = print_string "You yell \"YES\" like a maniac. People start looking.
+            let _ = print_string "You yell \"YES\" like a maniac.
+                        People start looking.
                         You might want to ask for \"help\" before you make and
                           even bigger fool of yourself.\n\n" in
               run score
           else
-            let _ = print_string "You yell \"NO\" like a maniac. People start looking.
+            let _ = print_string "You yell \"NO\" like a maniac.
+                        People start looking.
                         You might want to ask for \"help\" before you make and
                           even bigger fool of yourself.\n\n" in
             run score
-  | Gibberish  -> let _ = print_string "No one knows what your saying. Everyone's looking at you funny now.
-                      Nice going. You might want to ask for \"help\" before you make and
-                     even bigger fool of yourself.\n\n" in
+  | Gibberish  -> let _ = print_string "No one knows what your saying.
+                      Everyone's looking at you funny now.
+                      Nice going. You might want to ask for \"help\"
+                      before you make and even bigger fool of yourself.\n\n" in
             run score
 
 
 let start =
   let start_score = 500 in
   let final_score = run score in
-  let _ = printf "You decide to leave this world of high stakes risks and OCaml puns.
-      You take one last look at the doorway before you walk away. You check your pockets.\n\n
-      You made it out with %d. That makes you \"%a\"." final_score (points_to_ocaml final_score) in
+  let _ = printf "You decide to leave this world of high stakes risks and
+      OCaml puns.
+      You take one last look at the doorway before you walk away.
+      You check your pockets.\n\n
+      You made it out with %d. That makes you \"%a\"."
+      final_score (points_to_ocaml final_score) in
   let _ = parse_input in
   ()
 

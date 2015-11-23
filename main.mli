@@ -1,5 +1,6 @@
 (*neatly organizes the possible inputs main takes*)
-type input = Quit | Check | Game of int | Confirm of bool | Help | Gibberish | Nul
+type input = Quit | Check | Game of int | Confirm of bool
+            | Help | Gibberish | Null
 
 (*takes the player's current score and
   returns a string of the appropiate caml pun
@@ -20,5 +21,5 @@ val start: unit -> unit
 val run: int -> int
 
 (*method called by run to parse the input taken from
-  the Parser moduel and return an input type to represent it*)
+  the Parser module and return an input type to represent it*)
 val parse_input: unit -> input
