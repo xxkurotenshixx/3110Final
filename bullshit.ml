@@ -1,21 +1,38 @@
-let rec parse () =
-  let inpu
-
-
 let rec game_start () =
-  let input = read_line() in
-  let input_lst = Str.split (Str.regexp " ") input in
-  if List.length input_lst = 1
+  let input = Parser.parse() in
+  if List.length input = 1
   then
-    match String.lowercase (List.nth input_lst 0) with
-    |"start" -> let deck = Deck.new_deck
-      deal ()
+    match String.lowercase (List.nth input 0) with
+    |"start" -> let deck = Deck.new_deck() in
+                let helper n hands pd = match n with
+                  |0 -> hands
+                  |_ -> let (c, d) = Deck.draw pd in
+                        let new_hands =
+                          (match n mod 4 with
+                           |0 -> [c :: (List.nth hands 0);
+                                  List.nth hands 1; List.nth hands 2; List.nth hands 3]
+                           |1 -> [List.nth hands 0;
+                                  c :: (List.nth hands 1);
+                                  List.nth hands 2; List.nth hands 3]
+                           |2 ->[List.nth hands 0; List.nth hands 1;
+                                 c :: (List.nth hands 2); List.nth hands 3]
+                           |_ ->[List.nth hands 0; List.nth hands 1; List.nth hands 2;
+                                 c :: (List.nth hands 3)])
+                        in helper (n-1) new_hands d
+                in let h = helper 52 [[];[];[];[]] deck
+                   in game_on (List.nth hands 0) (List.nth hands 1)
+                              (List.nth hands 2) (List.nth hands 3) [] 0 1
     |"quit" -> false
     |_ -> Printf.printf "Please enter START or Quit";
           game_start()
   else
     let _ = Printf.printf "Please enter START or Quit" in
     game_start()
+
+let rec game_on p1 p2 p3 p4 center n c =
+  let input = Parser.parse () in
+
+  ()
 
 let run bet =
   Printf.printf "You have joined a new round of Bullshit! You have bet %d!" bet;
