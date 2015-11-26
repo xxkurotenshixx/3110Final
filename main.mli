@@ -1,6 +1,6 @@
 (*neatly organizes the possible inputs main takes*)
 type input = Quit | Check | Game of int | Confirm of bool
-            | Help | Gibberish | Null
+            | Help | Gibberish | Nul
 
 (*takes the player's current score and
   returns a string of the appropiate caml pun
