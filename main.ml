@@ -122,13 +122,13 @@ let rec run score =
   | Confirm x  -> if x then
             let _ = print_string "You yell \"YES\" like a maniac.
                         People start looking.
-                        You might want to ask for \"help\" before you make and
+                        You might want to ask for \"help\" before you make an
                           even bigger fool of yourself.\n\n" in
               run score
           else
             let _ = print_string "You yell \"NO\" like a maniac.
                         People start looking.
-                        You might want to ask for \"help\" before you make and
+                        You might want to ask for \"help\" before you make an
                           even bigger fool of yourself.\n\n" in
             run score
   | Gibberish  -> let _ = print_string "No one knows what your saying.
