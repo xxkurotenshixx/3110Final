@@ -1,3 +1,3 @@
 let parse () =
   let input = read_line () in
-  String.split (Str.regex " ") input
+  Str.split (Str.regexp " ") input
