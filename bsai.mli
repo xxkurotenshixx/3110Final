@@ -9,5 +9,4 @@ val bullshit_caller: unit -> bool
   decides which card(s) to play next
 *)
 
-val play_card: int -> 'a list
-
+val play_card: int -> card list -> card list
