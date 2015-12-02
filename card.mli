@@ -26,6 +26,8 @@ sig
 
   val string_to_card: string -> card
 
+  val string_to_suit: string -> suit
+
   val int_to_str: int -> string
 
   val same_card: card -> card -> bool

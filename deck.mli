@@ -11,10 +11,10 @@ sig
   val empty: deck
 
   (*The ordered, standard 52 card deck*)
-  val new_deck: deck
+  val new_deck: unit -> deck
 
   (*An ordered deck made of two standard 52 card decks*)
-  val new_double_deck: deck
+  val new_double_deck: unit -> deck
 
   (*picks a card randomly from the deck
   returns the card paired with the deck with that card removed

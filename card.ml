@@ -41,19 +41,19 @@ let int_to_rank = function
   | _ -> failwith "not a valid rank int"
 
 let string_to_rank = function
-  | "Two"   -> Two
-  | "Three" -> Three
-  | "Four"  -> Four
-  | "Five"  -> Five
-  | "Six"   -> Six
-  | "Seven" -> Seven
-  | "Eight" -> Eight
-  | "Nine"  -> Nine
-  | "Ten"   -> Ten
-  | "Jack"  -> Jack
-  | "Queen" -> Queen
-  | "King"  -> King
-  | "Ace"   -> Ace
+  | "two"   -> Two
+  | "three" -> Three
+  | "four"  -> Four
+  | "five"  -> Five
+  | "six"   -> Six
+  | "seven" -> Seven
+  | "eight" -> Eight
+  | "nine"  -> Nine
+  | "ten"   -> Ten
+  | "jack"  -> Jack
+  | "queen" -> Queen
+  | "king"  -> King
+  | "ace"   -> Ace
   | _ -> failwith "not a valid rank string"
 
 let rank_string = function
@@ -81,30 +81,21 @@ let card_to_string c =
   let s,r = c in
     rank_string r ^ " of " ^ suit_string s
 
-let string_to_card s =
-  let sl = Str.split (Str.regexp ", ") s in
-  let r = match List.nth sl 0 with
-    | "1" -> Ace
-    | "2" -> Two
-    | "3" -> Three
-    | "4" -> Four
-    | "5" -> Five
-    | "6" -> Six
-    | "7" -> Seven
-    | "8" -> Eight
-    | "9" -> Nine
-    | "10" -> Ten
-    | "11" -> Jack
-    | "12" -> Queen
-    | "13" -> King
-    | _ -> failwith "Not a valid input." in
-  let s = match List.nth sl 1 with
+let string_to_suit = function
     | "spades" -> Spades
     | "diamonds" -> Diamonds
     | "clubs" -> Clubs
     | "hearts" -> Hearts
-    | _ -> failwith "Not a valid input." in
-  (s,r)
+    | _ -> failwith "not a valid input"
+
+let string_to_card s =
+  try
+    let sl = Str.split (Str.regexp ", ") s in
+    let r = string_to_rank (List.nth sl 0) in
+    let s = string_to_suit (List.nth sl 1) in
+    (s,r)
+  with
+  | _ -> failwith "invalid card"
 
 let int_to_str n = match n with
   | 1 -> "Ace"

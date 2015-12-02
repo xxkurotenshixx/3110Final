@@ -1,10 +1,8 @@
-open Card
-open Bsupdater
 module Bullshit:
 sig
-(*  type state =  {p1: Card.card list; p2: Card.card list; p3: Card.card list;
-               p4: Card.card list; c: Card.card list; cp: int; cn: int}
- *)
+open Card
+open Bsupdater
+
   (**
   * [game_start] acts as the game engine.
   *
