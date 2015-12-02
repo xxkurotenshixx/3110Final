@@ -10,17 +10,18 @@ let game_lost () =
 let game_tie () =
   Printf.printf "Both you and the dealer have the same amount.\n"
 
-let dealer_bust () =
-  Printf.printf "Congratulations! The "
 let game_won () =
   Printf.printf "Congratulations! You WIN!"
 
 let quit () =   Printf.printf "Are you sure you wish to leave? \
                You will lose your bet. (y/n)\n"
 
-let help () =
+let welcome () = "unimplemented"
 
-let rules () =
+
+let help () = "unimplemented"
+
+let rules () = "unimplemented"
 
 let print_hand cards =
   let rec helper = function
@@ -30,7 +31,7 @@ let print_hand cards =
   Printf.printf "Cards in your hand: \n";
   helper cards
 
-let starter () =
+let start_prompt () =
   Printf.printf "Please enter start, help, or quit \n"
 
 
