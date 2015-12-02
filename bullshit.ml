@@ -57,4 +57,6 @@ module Bullshit = struct
     if game_start ()
     then bid
     else -2 * bid
+
+  let _ = run 5
 end

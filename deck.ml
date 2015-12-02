@@ -23,6 +23,9 @@ module Deck = struct
   let new_double_deck () =
     new_deck () @ new_deck ()
 
+  let new_quad_deck () =
+    new_deck () @ new_deck () @ new_deck () @ new_deck ()
+
   let size d =
     List.length d
 
@@ -32,6 +35,7 @@ module Deck = struct
     | h::t -> if n = 0 then t else h::(remove (n-1) t)
 
   let draw d =
+    let _ = Random.self_init() in
     let n = Random.int (size d) in
     let new_deck = remove n d in
     let drawn_card = List.nth d n in

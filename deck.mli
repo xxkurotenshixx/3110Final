@@ -16,6 +16,9 @@ sig
   (*An ordered deck made of two standard 52 card decks*)
   val new_double_deck: unit -> deck
 
+  (*An ordered deck made of four standard 52 card decks*)
+  val new_quad_deck: unit -> deck
+
   (*picks a card randomly from the deck
   returns the card paired with the deck with that card removed
   Raises Empty if there are no cards in the deck *)
