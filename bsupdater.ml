@@ -30,11 +30,12 @@ module Bsupdater = struct
     dealer deck cs 52
 
   let remove_cards h cl =
-    List.filter (fun x -> List.exists (Card.same_card x) cl) h
+    List.filter (fun x -> not (List.exists (Card.same_card x) cl)) h
 
   let check_bs s cl nc tc p =
     let c = (Card.string_to_suit "spades", tc) in
-    if List.for_all (Card.same_number c) cl && List.length cl = nc
+    if List.for_all (Card.same_number c) cl && List.length cl = nc &&
+         tc = Card.int_to_rank s.cn
     then
       let ns = match p with
         | 1 -> {s with p1 = s.p1 @ cl @ s.c}
@@ -47,7 +48,7 @@ module Bsupdater = struct
         | 3 -> {ns with p3 = remove_cards s.p3 cl}
         | _ -> {ns with p4 = remove_cards s.p4 cl} in
       let fns = {ns1 with c = []; cp = if s.cp = 4 then 1 else s.cp + 1;
-                cn = if s.cn = 13 then 1 else s.cn + 1} in
+                          cn = if s.cn = 13 then 1 else s.cn + 1} in
       (false, fns)
     else
       let ns = match s.cp with
@@ -64,8 +65,8 @@ module Bsupdater = struct
     | 1 -> {s with p1 = remove_cards s.p1 cl}
     | 2 -> {s with p2 = remove_cards s.p2 cl}
     | 3 -> {s with p3 = remove_cards s.p3 cl}
-    | _ -> {s with p4 = remove_cards s.p4 cl}
-    in {ns with c = cl @ s.c; cp = if s.cp = 4 then 1 else s.cp + 1;
+    | _ -> {s with p4 = remove_cards s.p4 cl} in
+    {ns with c = cl @ s.c; cp = if s.cp = 4 then 1 else s.cp + 1;
                 cn = if s.cn = 13 then 1 else s.cn + 1}
 
   let p s n =
