@@ -1,23 +1,30 @@
-type state = {p1 : Card List; p2 : Card List; p3 : Card List; p4 : Card List;
-              c : Card List; cp : int ; cn : int}
+open Card
+open Bsprint
+open Bsai
+open Hbs
+open Deck
+open Bsupdater
+
+type state = {p1 : Card.card list; p2 : Card.card list; p3 : Card.card list;
+              p4 : Card.card list; c : Card.card list; cn : int; cp: int}
 
 let rec run_game s =
   if (s.p1 = [] || s.p2 = [] || s.p3 = []) && s.p4 <> []
   then let _ = Bsprint.game_lost () in
        false
   else if s.p4 = []
-  then let _ = Bsprint.game_win () in
+  then let _ = Bsprint.game_won () in
        true
   else
     try
       let _ = Bsprint.player_turn s.cp s.cn in
-      let (cl, nc, tc) = match s.cp with
+      let (cl, nc, tc) = (match s.cp with
         | 1 -> Bsai.play_card s.cn s.p1
         | 2 -> Bsai.play_card s.cn s.p2
         | 3 -> Bsai.play_card s.cn s.p3
         | _ -> Bsprint.print_hand s.p4;
                Bsprint.what_cards s.cn;
-               Hbs.play_cards s.cn s.p4 in
+               Hbs.play_cards s.cn s.p4) in
       Bsprint.cards_played s.cp nc tc;
       if s.cp = 4
       then
@@ -44,4 +51,4 @@ let run bid =
   Bsprint.rules ();
   if game_start ()
   then bid
-  else -bid
+  else -2 * bid

@@ -1,3 +1,4 @@
+module Bsupdater = struct
 type state = {p1 : Card List; p2 : Card List; p3 : Card List; p4 : Card List;
               c : Card List; cp : int; cn : int}
 
@@ -57,3 +58,5 @@ let no_bs cl s =
   | 2 -> {s with c = cl @ s.c; p2 = remove_cards s.p2 cl}
   | 3 -> {s with c = cl @ s.c; p3 = remove_cards s.p3 cl}
   | _ -> {s with c = cl @ s.c; p4 = remove_cards s.p4 cl}
+
+end

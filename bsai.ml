@@ -1,3 +1,4 @@
+module Bsai = struct
 let call_bs () = Random.int 3 = 0
 
 let call_bsp () =
@@ -15,3 +16,4 @@ let play_card n hands =
   if play = []
   then ([List.hd hands], 1, Card.int_to_rank n)
   else (play, List.length play, Card.int_to_rank n)
+end

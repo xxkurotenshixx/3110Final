@@ -1,3 +1,4 @@
+module Card = struct
 (*used to represent card suits*)
 type suit = Spades | Diamonds | Hearts | Clubs
 (*used to represent card rank*)
@@ -8,7 +9,7 @@ type card = suit * rank
 
 let card_to_int c =
   let (s,r) = c in
-  match r with with
+  match r with
     | Two   -> 2
     | Three -> 3
     | Four  -> 4
@@ -83,19 +84,19 @@ let card_to_string c =
 let string_to_card s =
   let sl = Str.split (Str.regexp ", ") s in
   let r = match List.nth sl 0 with
-    | 1 -> Ace
-    | 2 -> Two
-    | 3 -> Three
-    | 4 -> Four
-    | 5 -> Five
-    | 6 -> Six
-    | 7 -> Seven
-    | 8 -> Eight
-    | 9 -> Nine
-    | 10 -> Ten
-    | 11 -> Jack
-    | 12 -> Queen
-    | 13 -> King
+    | "1" -> Ace
+    | "2" -> Two
+    | "3" -> Three
+    | "4" -> Four
+    | "5" -> Five
+    | "6" -> Six
+    | "7" -> Seven
+    | "8" -> Eight
+    | "9" -> Nine
+    | "10" -> Ten
+    | "11" -> Jack
+    | "12" -> Queen
+    | "13" -> King
     | _ -> failwith "Not a valid input." in
   let s = match List.nth sl 1 with
     | "spades" -> Spades
@@ -105,7 +106,7 @@ let string_to_card s =
     | _ -> failwith "Not a valid input." in
   (s,r)
 
-let int_to_str = function
+let int_to_str n = match n with
   | 1 -> "Ace"
   | 2 -> "Two"
   | 3 -> "Three"
@@ -126,3 +127,5 @@ let same_number c1 c2 =
   r1 = r2
 
 let same_card c1 c2 = c1 = c2
+
+end
