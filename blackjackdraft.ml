@@ -41,6 +41,7 @@ let compare_sum ph dh =
 
 (*gotta deal with soft 17 later aka when hand of 17 with Ace counted as 11*)
 let dealer_move hand =
+  let _ = "The dealer's hand is as follows:" in
   let _ = Bjprinter.print_hand hand in
   match sum hand with
   | x with (x = 21) -> if ph = 21 then Bjprinter.game_tie () else Bjprinter.game_lost ()
@@ -56,12 +57,14 @@ let player_check hand dh =
 
 let rec player_move input ph dh =
   match input with
-  | "hit" -> let new_hand = hit ph in player_check new_hand
+  | "hit" -> let new_hand = hit ph in
+             let _ = player_check new_hand in
+             player_move input new_hand dh
   | "stand" -> dealer_move dh
 
 let hit hand =
 
-let run
+let run =
 
 
 

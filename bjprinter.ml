@@ -1,9 +1,6 @@
 open Card
 
 module Blackjackprint = struct
-let natural_lost () =
-  Printf.printf "Game over! The dealer had a natural 21. \n"
-
 let game_lost () =
   Printf.printf "Game over! The dealer was closer to 21 than you were!\n"
 
