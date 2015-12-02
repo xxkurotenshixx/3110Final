@@ -1,7 +1,8 @@
 module Dealer = struct
 open Deck
 open Card
-
+open Bjupdater
+open Bjprinter
 
 let card_val c hand=
   let (s,r) = c in
