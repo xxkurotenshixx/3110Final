@@ -40,7 +40,30 @@ let quit () =
 let help () =
   Printf.printf "help unimplemented\n"
 
-let rules () = Printf.printf "rules umimplemented\n"
+let rules () = Printf.printf "In Bullshit, you are playing against three other players.\n
+ You start each game with a hand of cards and the GOAL of the
+ game is to PUT DOWN all of your cards. \n
+ How, do I do that you may ask? \n
+ The first player puts down cards in ascending order, starting with an Ace. \n
+ For example, you could put down an Ace and then a Two.
+ The next player would then start by putting down a Two and then three Threes
+ and a Four. \n
+ HOWEVER, what YOU SAY YOU PUT DOWN - notated by the first section of your
+ input (AKA Numbers of Cards,Type of Card) - is not necessarily what you
+ put down. \n
+ The cards YOU ACTUALLY PUT DOWN are notated after in the form
+ of Suit,Number. \n
+ These are the Suits: Spades, Hearts, Clubs, Diamonds
+ The 'Number' is notated in this form: 1 is the Ace, 2 is Two,
+ 11 is Jack, 12 is Queen, and 13 is King. \n
+ You, as well as every other player, can call Bullshit after
+ another player's cards are put down. When this happens,
+ you either: 1. Are correct and the entire pile is put in the
+ losing player's hand OR 2. Are wrong and those cards are put
+ into your hand.
+ TYPE start to begin.
+ TYPE help if you need help at any point during the game.
+ TYPE quit if you would like to exit the game.\n"
 
 let print_hand cards =
   let rec helper = function
@@ -51,15 +74,15 @@ let print_hand cards =
   helper cards
 
 let what_cards n =
-  Printf.printf "What would you like to play? Please enter it in the \
-                 following format:\n\\
-                 Number of Cards,Type of Card Suit,Number Suit,Number etc.\n
-                 where a Suit is Spades, Diamonds, Clubs, or Hearts and\n\
-                 Ace is 1, Jack is 11, Queen is 12, and King is 13\n
-                 e.g. 3,Ace Spades,1 Diamonds,13 Hearts,4\n\
-                 The current card is: %s.\n\
-                 Please play at least one card.\n\
-                 To see your cards, enter 'hands'.\n" (Card.int_to_str n)
+Printf.printf " \nWhat would you like to play? Please enter it in the \
+following format: \n
+Number of Cards,Type of Card Suit,Number Suit,Number etc.\n
+A Suit is Spades, Diamonds, Clubs, or Hearts.
+The Number is notated as follows: Ace is 1, Jack is 11, Queen is 12, King is 13
+e.g. 3,Ace Spades,1 Diamonds,13 Hearts,4\n
+ The current card is: %s.\n
+ Please play at least one card.
+ To see your cards, enter 'hands'.\n" (Card.int_to_str n)
 
 let starter () =
   Printf.printf "Please enter start, help, or quit.\n"
