@@ -1,5 +1,6 @@
 open Bsprint
 open Card
+open Parser
 module Hbs =
   struct
     let rec quit_confirm () =
