@@ -46,7 +46,8 @@ module Bsupdater = struct
         | 2 -> {ns with p2 = remove_cards s.p2 cl}
         | 3 -> {ns with p3 = remove_cards s.p3 cl}
         | _ -> {ns with p4 = remove_cards s.p4 cl} in
-      let fns = {ns1 with c = []; cp = if s.cp = 4 then 1 else s.cp + 1} in
+      let fns = {ns1 with c = []; cp = if s.cp = 4 then 1 else s.cp + 1;
+                cn = if s.cn = 13 then 1 else s.cn + 1} in
       (false, fns)
     else
       let ns = match s.cp with
@@ -54,14 +55,18 @@ module Bsupdater = struct
         | 2 -> {s with c = []; p2 = s.p2 @ s.c}
         | 3 -> {s with c = []; p3 = s.p3 @ s.c}
         | _ -> {s with c = []; p4 = s.p4 @ s.c} in
-      (true, ns)
+      let fns = {ns with c = []; cp = if s.cp = 4 then 1 else s.cp + 1;
+                         cn = if s.cn = 13 then 1 else s.cn + 1} in
+      (true, fns)
 
   let no_bs cl s =
-    match s.cp with
-    | 1 -> {s with c = cl @ s.c; p1 = remove_cards s.p1 cl}
-    | 2 -> {s with c = cl @ s.c; p2 = remove_cards s.p2 cl}
-    | 3 -> {s with c = cl @ s.c; p3 = remove_cards s.p3 cl}
-    | _ -> {s with c = cl @ s.c; p4 = remove_cards s.p4 cl}
+    let ns = match s.cp with
+    | 1 -> {s with p1 = remove_cards s.p1 cl}
+    | 2 -> {s with p2 = remove_cards s.p2 cl}
+    | 3 -> {s with p3 = remove_cards s.p3 cl}
+    | _ -> {s with p4 = remove_cards s.p4 cl}
+    in {ns with c = cl @ s.c; cp = if s.cp = 4 then 1 else s.cp + 1;
+                cn = if s.cn = 13 then 1 else s.cn + 1}
 
   let p s n =
     match n with

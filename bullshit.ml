@@ -45,9 +45,12 @@ module Bullshit = struct
       | _ -> false
 
   let rec game_start () =
-    if Hbs.start ()
-    then run_game (Bsupdater.new_game ())
-    else false
+    try
+      if Hbs.start ()
+      then run_game (Bsupdater.new_game ())
+      else false
+    with
+    | _ -> false
 
   let run bid =
     Bsprint.rules ();

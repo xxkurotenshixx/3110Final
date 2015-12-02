@@ -19,20 +19,21 @@ module Hbs =
         match List.nth input 0 with
         | "start" -> true
         | "quit" -> Bsprint.quit ();
-                    quit_confirm ()
+                    if quit_confirm ()
+                    then failwith "quit"
+                    else start()
         | "help" -> Bsprint.help ();
                     start ()
         | _ -> Bsprint.starter ();
                start ()
       with
-      | _ -> Bsprint.starter ();
-             start ()
+      | _ -> false
 
     let rec play_cards n hands =
       let rec helper h acc =
         match h with
         | [] -> acc
-        | hd::tl -> helper tl (List.exists (fun x -> hd = x) hands) in
+        | hd::tl -> helper tl (List.exists (Card.same_card hd) hands) in
       let input = Parser.parse () in
       if List.length input = 0 then
         play_cards n hands
@@ -49,16 +50,18 @@ module Hbs =
         | _ -> play_cards n hands
       else
         try
-          let sl = Str.split (Str.regexp ", ") (List.nth input 0) in
+          let sl = Str.split (Str.regexp ",") (List.nth input 0) in
           let cl = List.map Card.string_to_card (List.tl input) in
           if helper cl true
           then
             try (cl, int_of_string (List.nth sl 0),
                  Card.string_to_rank (List.nth sl 1)) with
-            | _ -> play_cards n hands
+            | _ -> Printf.printf "error";
+                   play_cards n hands
           else play_cards n hands
         with
-        | _ -> play_cards n hands
+        | _ -> Printf.printf "Please enter this in the correct format";
+               play_cards n hands
 
     let rec call_bs hand =
       let input = Parser.parse () in

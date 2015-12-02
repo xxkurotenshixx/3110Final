@@ -45,7 +45,7 @@ let rules () = Printf.printf "rules umimplemented\n"
 let print_hand cards =
   let rec helper = function
     |[] -> ()
-    |h::t -> Printf.printf "%s" (Card.card_to_string h);
+    |h::t -> Printf.printf "%s\n" (Card.card_to_string h);
              helper t in
   Printf.printf "Cards in your hand: \n";
   helper cards
@@ -53,11 +53,10 @@ let print_hand cards =
 let what_cards n =
   Printf.printf "What would you like to play? Please enter it in the \
                  following format:\n\\
-                 (Number of Cards, Type of Card) (Suit, Number) \
-                 (Suit, Number), etc.\n \
+                 Number of Cards,Type of Card Suit,Number Suit,Number etc.\n
                  where a Suit is Spades, Diamonds, Clubs, or Hearts and\n\
                  Ace is 1, Jack is 11, Queen is 12, and King is 13\n
-                 e.g. (3, Ace) (Spades, 1) (Diamonds, 13), (Hearts, 4)\n\
+                 e.g. 3,Ace Spades,1 Diamonds,13 Hearts,4\n\
                  The current card is: %s.\n\
                  Please play at least one card.\n\
                  To see your cards, enter 'hands'.\n" (Card.int_to_str n)

@@ -90,9 +90,9 @@ let string_to_suit = function
 
 let string_to_card s =
   try
-    let sl = Str.split (Str.regexp ", ") s in
-    let r = string_to_rank (List.nth sl 0) in
-    let s = string_to_suit (List.nth sl 1) in
+    let sl = Str.split (Str.regexp ",") s in
+    let s = string_to_suit (List.nth sl 0) in
+    let r = int_to_rank (int_of_string (List.nth sl 1)) in
     (s,r)
   with
   | _ -> failwith "invalid card"
