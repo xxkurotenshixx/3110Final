@@ -6,8 +6,11 @@ sig
   type state
   val sum: Card.card list ->  int
 
-  (*is p a string in hit s p?*)
+  val winner: state -> state
+
   val hit: state -> string -> state
+
+  val round_won: int -> state -> state
 
   val new_game_deal: int -> state -> state
 
