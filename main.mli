@@ -1,7 +1,7 @@
-
-module Main = sig
+module Main:
+sig
   (*neatly organizes the possible inputs main takes*)
-  type input = Number int | Quit | Check | Game int | Confirm bool | Help | Gibberish
+  type input = Number of int | Quit | Check | Game of int | Confirm of bool | Help | Gibberish
 
   (*takes the player's current score and
     returns a string of the appropiate caml pun
@@ -27,5 +27,5 @@ module Main = sig
   (*responds to the input apropriately.
     is given the current score in a pair for
     printing the current score if necssary*)
-  val respond: (input,int) -> int
+  val respond: (input * int) -> int
 end
