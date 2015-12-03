@@ -428,4 +428,3 @@ let run (wager : int) : int =
   let gs = init_gs () in
   if (turn H gs) then (2 * wager) else 0
 
-let _ = run 5
