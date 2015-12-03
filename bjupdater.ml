@@ -3,7 +3,7 @@ module Bjupdater = struct
   open Card
 
   type state = {dealer: Card.card list; player: Card.card list;
-                deck: Card.card list; money: int; rounds: int;
+                deck: Deck.deck; money: int; rounds: int;
                 dp:int; pp:int; finished: bool; win:int}
 
   let sum cl =
@@ -43,20 +43,20 @@ module Bjupdater = struct
 
   let new_game_deal bid s =
     let deck =
-      if List.length s.deck < 10 || rounds mod 5 = 0
+      if Deck.size s.deck < 10 || s.rounds mod 5 = 0
       then
-        s.deck @ Deck
+        Deck.combine_deck s.deck (Deck.new_deck ())
       else
         s.deck in
     let ns = {s with rounds = s.rounds + 1; money = s.money - bid;
-                     deck; dp = 0; pp = 0} in
+                     deck; dp = 0; pp = 0; dealer = []; player = []; win = 0} in
     let order = ["player";"dealer";"player";"dealer"] in
     List.fold_left hit ns order
 
   let new_table money =
     let deck = Deck.new_double_deck () in
-    new_game_deal {dealer = []; player = []; deck; money; rounds = 0;
-                  dp = 0; pp = 0; finished = false; win= 0}
+    {dealer = []; player = []; deck; money; rounds = 0;
+     dp = 0; pp = 0; finished = false; win = 0}
 
   let money s = s.money
   let deck s = s.deck
@@ -66,4 +66,5 @@ module Bjupdater = struct
   let dbust s = s.dp > 21
   let ddraw s = s.dp < 17
   let winner s = s.win
+  let rounds s = s.rounds
 end

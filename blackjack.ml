@@ -1,11 +1,14 @@
 module Blackjack = struct
-
+  open Bjprinter
+  open Bjupdater
+  open Hbj
   let rec player_turn s =
-    Bjprinter.player_prompt (Bjupdater.player s);
+    Bjprinter.player_prompt ();
+    Bjprinter.print_hand (Bjupdater.player s);
     if Hbj.play ()
     then
       let ns = Bjupdater.hit s "player" in
-      if Bjupdater.pbust s
+      if Bjupdater.pbust ns
       then ns
       else player_turn ns
     else
@@ -24,10 +27,8 @@ module Blackjack = struct
 
   let rec runner s =
     Bjprinter.start_prompt ();
-    let bid = Hbj.start Bjupdater.money s in
-    if bid < 0
-    then runner s
-    else
+    try
+      let bid = Hbj.bid (Bjupdater.money s) in
       let ns = Bjupdater.new_game_deal bid s in
       if Bjupdater.dbust ns
       then let _ = Bjprinter.round_won () in
@@ -59,26 +60,28 @@ module Blackjack = struct
                 then runner fs
                 else fs
               else
-                if Bjupdater.status fs = 0
+                if Bjupdater.winner fs = 0
                 then
-                  let _ = game_tie () in
+                  let _ = Bjprinter.game_tie () in
                   if Hbj.confirm ()
                   then runner fs
                   else fs
                 else
-                  if Bjupdater.status fs = 1
+                  if Bjupdater.winner fs = 1
                   then
-                    let _ = round_won () in
+                    let _ = Bjprinter.round_won () in
                     if Hbj.confirm ()
                     then runner fs
                     else fs
                   else
-                    let _ = round_lost () in
+                    let _ = Bjprinter.round_lost () in
                     if Hbj.confirm ()
                     then runner fs
                     else fs
           with
           | _ -> ns
+    with
+    | _ -> s
 
   let run money =
     Bjprinter.welcome ();
@@ -87,3 +90,5 @@ module Blackjack = struct
     Bjprinter.leave money (Bjupdater.money s) (Bjupdater.rounds s);
     Bjupdater.money s
 end
+
+let _ = Blackjack.run 500

@@ -1,12 +1,18 @@
-open Card
 module Bjprinter:
 sig
+  open Card
+  val leave: int -> int -> int -> unit
 
+  val player_prompt: unit -> unit
+
+  val prompt: unit -> unit
   (* [game_lost] prints the message the player sees when they lose the game *)
-  val game_lost: unit -> unit
+  val round_lost: unit -> unit
 
   (* [game_won] prints the message the player sees when they win the game *)
-  val game_won: unit -> unit
+  val round_won: unit -> unit
+
+  val game_tie: unit -> unit
 
   (* [quit]  prints a message if the user types in 'quit,' asking whether or not
    * they actuallt want to quit the game *)
@@ -27,4 +33,6 @@ sig
 
   (* [start_prompt] prints the starting message. *)
   val start_prompt: unit -> unit
-end 
+
+  val bid_prompt: unit -> unit
+end

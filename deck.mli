@@ -7,6 +7,8 @@ sig
   (*thrown when atempting to draw from an empty deck*)
   exception Empty
 
+  val combine_deck: deck -> deck -> deck
+
   (*the empty deck*)
   val empty: deck
 

@@ -41,4 +41,7 @@ module Deck = struct
     let drawn_card = List.nth d n in
     (drawn_card,new_deck)
 
+  let combine_deck d1 d2 =
+    d1 @ d2
+
 end
