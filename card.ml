@@ -8,7 +8,7 @@ type rank = Two | Three | Four | Five | Six | Seven | Eight | Nine |
 type card = suit * rank
 
 let card_to_int c =
-  let (s,r) = c in
+  let _,r = c in
   match r with
     | Two   -> 2
     | Three -> 3
@@ -25,20 +25,20 @@ let card_to_int c =
     | Ace   -> 1
 
 let int_to_rank = function
-  | 1 -> Ace
-  | 2 -> Two
-  | 3 -> Three
-  | 4 -> Four
-  | 5 -> Five
-  | 6 -> Six
-  | 7 -> Seven
-  | 8 -> Eight
-  | 9 -> Nine
+  | 1  -> Ace
+  | 2  -> Two
+  | 3  -> Three
+  | 4  -> Four
+  | 5  -> Five
+  | 6  -> Six
+  | 7  -> Seven
+  | 8  -> Eight
+  | 9  -> Nine
   | 10 -> Ten
   | 11 -> Jack
   | 12 -> Queen
   | 13 -> King
-  | _ -> failwith "not a valid rank int"
+  | n  -> failwith (string_of_int n ^ "cannot be converted to a rank")
 
 let string_to_rank = function
   | "two"   -> Two
@@ -54,7 +54,7 @@ let string_to_rank = function
   | "queen" -> Queen
   | "king"  -> King
   | "ace"   -> Ace
-  | _ -> failwith "not a valid rank string"
+  | s       -> failwith (s ^ "cannot be converted to a rank")
 
 let rank_string = function
   | Two   -> "Two"
@@ -82,35 +82,37 @@ let card_to_string c =
     rank_string r ^ " of " ^ suit_string s
 
 let string_to_suit = function
-    | "spades" -> Spades
+    | "spades"   -> Spades
     | "diamonds" -> Diamonds
-    | "clubs" -> Clubs
-    | "hearts" -> Hearts
-    | _ -> failwith "not a valid input"
+    | "clubs"    -> Clubs
+    | "hearts"   -> Hearts
+    | s          -> failwith (s ^ "cannot be converted to a suit")
 
-let string_to_card s =
+let string_to_card str =
   try
-    let sl = Str.split (Str.regexp ",") s in
+    let sl = Str.split (Str.regexp ",") str in
     let s = string_to_suit (List.nth sl 0) in
     let r = int_to_rank (int_of_string (List.nth sl 1)) in
     (s,r)
   with
   | _ -> failwith "invalid card"
 
-let int_to_str n = match n with
-  | 1 -> "Ace"
-  | 2 -> "Two"
-  | 3 -> "Three"
-  | 4 -> "Four"
-  | 5 -> "Five"
-  | 6 -> "Six"
-  | 7 -> "Seven"
-  | 8 -> "Eight"
-  | 9 -> "Nine"
+let int_to_str n =
+  match n with
+  | 1  -> "Ace"
+  | 2  -> "Two"
+  | 3  -> "Three"
+  | 4  -> "Four"
+  | 5  -> "Five"
+  | 6  -> "Six"
+  | 7  -> "Seven"
+  | 8  -> "Eight"
+  | 9  -> "Nine"
   | 10 -> "Ten"
   | 11 -> "Jack"
   | 12 -> "Queen"
-  | _ -> "King"
+  | 13 -> "King"
+  | m  -> failwith (string_of_int m ^ "cannot be converted to a rank string")
 
 let same_number c1 c2 =
   let _,r1 = c1 in
