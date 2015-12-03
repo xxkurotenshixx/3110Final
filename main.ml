@@ -35,7 +35,7 @@ let points_to_caml score =
     "MCaml"
   else if score > 9600 then
     "NCaml"
-  else if score > 10000 then
+  else 
     "OCaml: King of Camllot"
 
 let parse_input =
