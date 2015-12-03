@@ -1,4 +1,5 @@
-
+module Main =
+struct
 let points_to_caml score =
   if score < 0 then
     "Dead Caml"
@@ -34,7 +35,7 @@ let points_to_caml score =
     "MCaml"
   else if score > 9600 then
     "NCaml"
-  else if score > 10000 then
+  else
     "OCaml: King of Camllot"
 
 let parse_input =
@@ -149,3 +150,4 @@ let start =
       final_score (points_to_ocaml final_score) in
   let _ = parse_input in
   ()
+end
