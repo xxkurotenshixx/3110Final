@@ -4,15 +4,15 @@ open Parser
 
 module Hbj =
   struct
-    let rec quit_confirm () =
+    let rec confirm () =
       let input = Parser.parse () in
          try
            match List.nth input 0 with
            | "y" -> true
            | "n" -> false
-           | _ -> quit_confirm ()
+           | _ -> confirm ()
          with
-         | _ -> quit_confirm ()
+         | _ -> confirm ()
 
     let rec start () =
       let input = Parser.parse () in
@@ -20,13 +20,31 @@ module Hbj =
         match List.nth input 0 with
         | "start" -> true
         | "quit" -> Bjprinter.quit ();
-                    if quit_confirm ()
+                    if confirm ()
                     then failwith "quit"
-                    else start()
+                    else start ()
         | "help" -> Bjprinter.help ();
                     start ()
+        | _ -> Bjprinter.start_prompt ();
+               start ()
       with
       | _ -> false
 
+    let rec play () =
+      let input = Parser.parse () in
+      if List.length input = 0
+      then play ()
+      else
+        match List.nth input 0 with
+        | "help" -> Bjprinter.help ();
+                    play()
+        | "stand" -> false
+        | "hit" -> true
+        | "quit" -> Bjprinter.quit ();
+                    if confirm ()
+                    then failwith "quit"
+                    else play ()
+        | _ -> Bjprinter.prompt ();
+               play()
 
 end

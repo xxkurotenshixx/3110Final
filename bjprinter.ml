@@ -1,17 +1,19 @@
 open Card
 
 module Blackjackprint = struct
-let game_lost () =
-  Printf.printf "Game over! The dealer was closer to 21 than you were!\n"
+let round_lost () =
+  Printf.printf "Game over! The dealer was closer to 21 than you were!\n\
+                 Would you like to play again?"
 
 let game_tie () =
   Printf.printf "Both you and the dealer have the same amount.\n"
 
-let game_won () =
-  Printf.printf "Congratulations! You WIN!"
+let round_won () =
+  Printf.printf "Congratulations! You WIN! Would you like to play again?"
 
-let quit () =   Printf.printf "Are you sure you wish to leave? \
-               You will lose your bet. (y/n)\n"
+let quit () =
+  Printf.printf "Are you sure you wish to leave? \
+                 You will lose your bet. (y/n)\n"
 
 let welcome () = Printf.printf "WELCOME TO A GAME OF BLACKJACK!"
 
