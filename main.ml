@@ -1,3 +1,5 @@
+type input = Quit | Check | Game of int | Confirm of bool
+            | Help | Gibberish | Nul
 
 let points_to_caml score =
   if score < 0 then
@@ -6,41 +8,41 @@ let points_to_caml score =
     "Calf"
   else if score = 500 then
     "Camlflaged"
-  else if score > 1150 then
+  else if score < 1150 then
     "ACaml"
-  else if score > 1800 then
+  else if score < 1800 then
     "BCaml"
-  else if score > 2450 then
+  else if score < 2450 then
     "CCaml"
-  else if score > 3100 then
+  else if score < 3100 then
     "DCaml"
-  else if score > 3750 then
+  else if score < 3750 then
     "ECaml"
-  else if score > 4400 then
+  else if score < 4400 then
     "FCaml"
-  else if score > 5050 then
+  else if score < 5050 then
     "GCaml"
-  else if score > 5700 then
+  else if score < 5700 then
     "HCaml"
-  else if score > 6350 then
+  else if score < 6350 then
     "ICaml"
-  else if score > 7000 then
+  else if score < 7000 then
     "JCaml"
-  else if score > 7650 then
+  else if score < 7650 then
     "KCaml"
-  else if score > 8300 then
+  else if score < 8300 then
     "LCaml"
-  else if score > 8950 then
+  else if score < 8950 then
     "MCaml"
-  else if score > 9600 then
+  else if score < 10000 then
     "NCaml"
-  else if score > 10000 then
+  else
     "OCaml: King of Camllot"
 
-let parse_input =
-  let input = Parser.parse in
+let parse_input () =
+  let input = Parser.parse () in
   let _ = print_string "\n\n" in
-  match l with
+  match input with
   | ("play")::("blackjack")::_  -> Game 1
   | ("play")::("bull")::("shit")::_  -> Game 2
   | ("play")::("go")::("fish")::_  -> Game 3
@@ -49,7 +51,7 @@ let parse_input =
   | ("n")::_ | ("no")::_ -> Confirm false
   | ("check")::_ -> Check
   | ("quit")::_ -> Quit
-  | ("help")::_ -> help
+  | ("help")::_ -> Help
   | [] -> Nul
   | _ -> Gibberish
 
@@ -57,52 +59,53 @@ let get_bid max =
   let _ = print_string "How much would you like to bid?\n\n" in
   let rec bid score =
     try
-      let num = read_int in
+      let num = read_int () in
       if num < 0 then
         let _ = print_string "Please type in a positive integer\n\n" in
-        get_bid score
+        bid score
       else if num > score then
         let _ = print_string "You dont have that much money, bid less\n\n" in
-        get_bid score
+        bid score
       else
         num
     with
     | Failure "int_of_string" ->
       let _ = print_string "Please type in a positive integer\n\n" in
-        get_bid score
+        bid score
   in
   bid max
 
-let rec get_quit_conf =
+let rec get_quit_conf ()=
   let _ = print_string "Are you sure you want to quit (y/n)?\n\n" in
-  match parse_input with
+  match parse_input () with
   | Confirm x -> x
   | _         ->
     let _ = print_string "Please answer yes or no\n\n" in
-    get_quit_conf
+    get_quit_conf ()
 
 let rec run score =
-  let input = parse_input in
+  let input = parse_input () in
   match input with
   | Game 0 -> let _ = print_string
           "You can \"play blackjack\", \"play bull shit\", or
           \"play go fish\"\n\n" in
-          run new_score
+          run score
   | Game 1 -> let new_score = Blackjack.run score in
         let _ = print_string "Welcome back to the lobby \n\n" in
         run new_score
-  | Game 2 -> let bid = get_bid in
+  | Game 2 -> let bid = get_bid score in
         let new_score = (Bullshit.run bid) + score in
         let _ = print_string "Welcome back to the lobby!\n\n" in
         run new_score
-  | Game 3 -> let bid = get_bid in
+  | Game 3 -> let bid = get_bid score in
         let new_score = (Gofish.run bid) + score in
         let _ = print_string "Welcome back to the lobby!\n\n" in
         run new_score
-  | Check  -> let _ = printf "You have %d currently in the bank\n" score in
-        let _ = printf "You currently have %s status\n\n" (points_to_ocaml score) in
+  | Game _ -> failwith "Game not implemented"
+  | Check  -> let _ = Printf.printf "You have %d currently in the bank\n" score in
+        let _ = Printf.printf "You currently have %s status\n\n" (points_to_caml score) in
         run score
-  | Quit   -> let really = get_quit_conf in
+  | Quit   -> let really = get_quit_conf () in
         if really then
           score
         else
@@ -138,17 +141,14 @@ let rec run score =
             run score
 
 
-let start =
+let start () =
   let start_score = 500 in
-  let final_score = run score in
-  let _ = printf "You decide to leave this world of high stakes risks and
+  let final_score = run start_score in
+  let _ = Printf.printf "You decide to leave this world of high stakes risks and
       OCaml puns.
       You take one last look at the doorway before you walk away.
       You check your pockets.\n\n
-      You made it out with %d. That makes you \"%a\"."
-      final_score (points_to_ocaml final_score) in
+      You made it out with %d. That makes you \"%s\"."
+      final_score (points_to_caml final_score) in
   let _ = parse_input in
   ()
-
-
-

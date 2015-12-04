@@ -10,10 +10,10 @@ type player = H | AI1 | AI2 | AI3
  *)
 type game_state =
   {mutable h_books : int; mutable ai1_books : int; mutable ai2_books : int;
-   mutable ai3_books : int; mutable h_hand : Card.t list;
-   mutable ai1_hand : Card.t list; mutable ai2_hand : Card.t list;
-   mutable ai3_hand : Card.t list; mutable history : (Card.t * player) list;
-   mutable deck : Deck.t}
+   mutable ai3_books : int; mutable h_hand : Card.card list;
+   mutable ai1_hand : Card.card list; mutable ai2_hand : Card.card list;
+   mutable ai3_hand : Card.card list; mutable history : (Card.card * player) list;
+   mutable deck : Deck.deck}
 
 (**
  * h_turn will prompt the user to take a turn. game_state will be mutated
@@ -30,4 +30,3 @@ val h_turn : game_state -> unit
   * proportional to magnitude of bet.
   *)
 val run : int -> int
-
