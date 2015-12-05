@@ -1,8 +1,8 @@
 open Card
 open Bsupdater
 
-(* [game_start ()] checks if the player has started the game.
- * If the player has, run_game is called and game_start
+(* [game_start] checks if the player has started the game.
+ * If the player has, run_game is called. game_start then
  * returns if the player won or lost the game. *)
 val game_start : unit -> bool
 
