@@ -57,6 +57,7 @@ let print_hand p gs : unit =
   | AI2 -> print_endline ("David's hand: " ^ (iterator gs.ai2_hand) ^ "\n")
   | AI3 -> print_endline ("Mike's hand: " ^ (iterator gs.ai3_hand) ^ "\n")
 
+(* Prints the request history *)
 let print_history gs : unit =
   let rec iterator history =
     match history with
@@ -65,15 +66,18 @@ let print_history gs : unit =
     | [] -> "" in
   print_endline ("History: " ^ iterator gs.history)
 
+(* Prints the size of the remaining deck *)
 let print_deck_size gs : unit =
   print_endline ("Deck size: " ^ string_of_int (size gs.deck))
 
+(* Prints the number of books played by each player *)
 let print_books gs : unit =
   print_endline ("Number of books- You: " ^ string_of_int gs.h_books ^
                  ", Walker: " ^ string_of_int gs.ai1_books ^
                  ", David: " ^ string_of_int gs.ai2_books ^
                  ", Mike: " ^ string_of_int gs.ai3_books ^ ".")
 
+(* Prints the current game state's components *)
 let omniscient gs : unit =
   print_endline( "********************************************************");
   print_hand H gs;
@@ -85,13 +89,14 @@ let omniscient gs : unit =
   print_deck_size gs;
   print_endline( "********************************************************")
 
-(* draws multiple cards *)
-let rec draw_multi (acc:card list) (draw_pile:deck) count : (card list * deck) =
-    if count = 0 then (acc, draw_pile)
+(* Returns the tuple ([n drawn cards], updated deck) *)
+let rec draw_multi (acc:card list) (draw_pile:deck) n : (card list * deck) =
+    if n = 0 then (acc, draw_pile)
     else
       let draw_result = draw draw_pile in
-      draw_multi ((fst draw_result)::acc) (snd draw_result) (count - 1)
+      draw_multi ((fst draw_result)::acc) (snd draw_result) (n - 1)
 
+(* Adds or updates (rank, player) to the request history *)
 let rec add_to_history (rank, player) history gs acc =
   match history with
   | [] -> gs.history <- ((rank, player)::gs.history)
@@ -99,7 +104,7 @@ let rec add_to_history (rank, player) history gs acc =
     if rank = r then gs.history <- (acc @ [(rank, player)] @ t)
     else add_to_history (rank, player) t gs ((r, p)::acc)
 
-(* Returns the starting initial game_state *)
+(* Returns the initial game_state *)
 let init_gs () : game_state =
   let h_result = draw_multi [] new_deck 5 in
   let ai1_result = draw_multi [] (snd h_result) 5 in
@@ -110,7 +115,7 @@ let init_gs () : game_state =
    ai2_hand = fst ai2_result; ai3_hand = fst ai3_result;
    history = []; deck = snd ai3_result}
 
-(* Prints the rules to the screen *)
+(* Prints the rules *)
 let init_rules () : unit =
   print_endline
   ("\nplayers take turns asking a specific player for a given rank of card. If someone asks you for a rank that you have, the cards are taken from your hand. if you do not have any cards of that rank, your opponent must go fish, taking one new card from the pile of cards.
@@ -123,8 +128,21 @@ Play continues until all hands are empty and there are no more cards to draw fro
 
 You will be playing with Walker, David, and Mike. Have fun!\n--------------------------------------------------\n")
 
+(* Makes p draw 5 cards. Updates gs accordingly. *)
+let redraw p gs =
+  let num_to_draw = min 5 (size gs.deck) in
+  let result = draw_multi [] gs.deck num_to_draw in
+  let () =
+      print_endline (player_to_string p ^": No more cards in hand. Drawing "
+                     ^ string_of_int num_to_draw ^ ".") in
+  gs.deck <- snd result;
+  match p with
+  | H -> gs.h_hand <- fst result
+  | AI1 -> gs.ai1_hand <- fst result
+  | AI2 -> gs.ai2_hand <- fst result
+  | AI3 -> gs.ai3_hand <- fst result
 
-(* Checks if player p has a book in their hand and updates gs accordingly *)
+(* Checks if player p has books in their hand and updates gs accordingly *)
 let check_for_books (p : player) (gs : game_state) : unit =
   let hand =
     match p with
@@ -201,59 +219,23 @@ let check_for_books (p : player) (gs : game_state) : unit =
   | H ->
     gs.h_books <- gs.h_books + num_new_books;
     gs.h_hand <- new_hand;
-    if gs.h_hand = []
-    then
-      let num_to_draw = min 5 (size gs.deck) in
-      let result = draw_multi [] gs.deck num_to_draw in
-      let () =
-        print_endline (player_to_string p ^ ": No more cards in hand. Drawing " ^
-                       string_of_int num_to_draw ^ ".") in
-      gs.h_hand <- fst result;
-      gs.deck <- snd result
-    else ()
+    if gs.h_hand = [] then redraw p gs else ()
   | AI1 ->
     gs.ai1_books <- gs.ai1_books + num_new_books;
     gs.ai1_hand <- new_hand;
-    if gs.ai1_hand = []
-    then
-      let num_to_draw = min 5 (size gs.deck) in
-      let result = draw_multi [] gs.deck num_to_draw in
-      let () =
-        print_endline (player_to_string p ^ ": No more cards in hand. Drawing " ^
-                       string_of_int num_to_draw ^ ".") in
-      gs.ai1_hand <- fst result;
-      gs.deck <- snd result
-    else ()
+    if gs.ai1_hand = [] then redraw p gs else ()
   | AI2 ->
     gs.ai2_books <- gs.ai2_books + num_new_books;
     gs.ai2_hand <- new_hand;
-    if gs.ai2_hand = []
-    then
-      let num_to_draw = min 5 (size gs.deck) in
-      let result = draw_multi [] gs.deck num_to_draw in
-      let () =
-        print_endline (player_to_string p ^ ": No more cards in hand. Drawing " ^
-                       string_of_int num_to_draw ^ ".") in
-      gs.ai2_hand <- fst result;
-      gs.deck <- snd result
-    else ()
+    if gs.ai2_hand = [] then redraw p gs else ()
   | AI3 ->
     gs.ai3_books <- gs.ai3_books + num_new_books;
     gs.ai3_hand <- new_hand;
-    if gs.ai3_hand = []
-    then
-      let num_to_draw = min 5 (size gs.deck) in
-      let result = draw_multi [] gs.deck num_to_draw in
-      let () =
-        print_endline (player_to_string p ^ ": No more cards in hand. Drawing " ^
-                       string_of_int num_to_draw ^ ".") in
-      gs.ai3_hand <- fst result;
-      gs.deck <- snd result
-    else ());
-    if num_new_books > 0 then print_books gs else ()
+    if gs.ai3_hand = [] then redraw p gs else ());
+  if num_new_books > 0 then print_books gs else ()
 
 
-
+(* Returns the list of ranks in h *)
 let rec history_to_ranklist self h =
   match h with
   | (rank, player)::t ->
@@ -261,6 +243,8 @@ let rec history_to_ranklist self h =
     else history_to_ranklist self t
   | [] -> []
 
+(* Performs a transfer rank_wanted from target to asker.
+   Returns true iff cards were transfered. *)
 let transfer asker target rank_wanted gs =
   print_endline ("\n" ^
                  (player_to_string asker) ^
@@ -315,12 +299,13 @@ let transfer asker target rank_wanted gs =
       | AI3 -> gs.ai3_hand <- (export @ gs.ai3_hand)
       end);
       (match target with
-      | H -> gs.h_hand <- (keep)
-      | AI1 -> gs.ai1_hand <- (keep)
-      | AI2 -> gs.ai2_hand <- (keep)
-      | AI3 -> gs.ai3_hand <- (keep)) in
+      | H -> gs.h_hand <- keep
+      | AI1 -> gs.ai1_hand <- keep
+      | AI2 -> gs.ai2_hand <- keep
+      | AI3 -> gs.ai3_hand <- keep) in
     true
 
+(* Prompts the user to input who to ask *)
 let rec who_to_ask () : player option =
   print_endline ("Who will you ask?");
   let input = parse () in
@@ -338,6 +323,7 @@ let rec who_to_ask () : player option =
   else
     who_to_ask ()
 
+(* Prompts the user to input what rank to ask for *)
 let rec rank_to_ask gs : rank option =
   print_endline ("What rank will you ask for?");
   let input = parse () in
@@ -388,12 +374,8 @@ let rec rank_to_ask gs : rank option =
       let () = print_endline "You can't ask for a rank you don't own.\n" in
       rank_to_ask gs
 
-
-(****************************************************************************)
-
-
-
-
+(* Simulates the user's asking for card.
+   Returns true iff cards were transfered *)
 let h_turn gs =
   let () = print_hand H gs in
   let target = who_to_ask () in
@@ -408,8 +390,7 @@ let h_turn gs =
         transfer H t r gs
       | _ -> failwith "Error in if-logic"
 
-
-
+(* Simulates ai's asking for a card. Returns true iff cards were transfered *)
 let ai_turn ai rank gs =
   Thread.delay 1.;
   let random_player () =
@@ -429,12 +410,11 @@ let ai_turn ai rank gs =
   add_to_history (rank, ai) gs.history gs [];
   transfer ai target rank gs
 
-
-
+(* Simulates p asking for a card. Continues to recursively call itself until
+   the game is over. Returns true iff user wins.*)
 let rec turn p gs =
   (* Uncomment line below to see game state as game runs *)
   (*omniscient gs;*)
-
   let total_points =
     gs.h_books + gs.ai1_books + gs.ai2_books + gs.ai3_books in
   if total_points > 13
@@ -451,110 +431,49 @@ let rec turn p gs =
     (if h_win then print_endline "You win!" else print_endline "You lose!");
     h_win
   else
+    let next_player =
+      match p with
+      | H -> AI1
+      | AI1 -> AI2
+      | AI2 -> AI3
+      | AI3 -> H in
+    let empty_deck_case p gs =
+      let () = print_endline (player_to_string p ^ ": Deck is empty. :(") in
+      (print_endline "--------------------------------------------------");
+      turn next_player gs in
+    let next_action b p gs =
+      let () = check_for_books p gs in
+      if b then turn p gs else turn next_player gs in
+    let get_rank p gs =
+      let hand =
+        match p with
+        | AI1 -> gs.ai1_hand
+        | AI2 -> gs.ai2_hand
+        | AI3 -> gs.ai3_hand
+        | H -> failwith "Don't use this method for user." in
+      let from_hist = ai_decide hand (history_to_ranklist p gs.history) in
+      (match from_hist with
+      | None -> choose_random hand
+      | Some r -> r) in
     match p with
     | H ->
-      (if gs.h_hand = []
-      then
-        let num_to_draw = min 5 (size gs.deck) in
-        let result = draw_multi [] gs.deck num_to_draw in
-        let () =
-          print_endline (player_to_string p ^ ": No more cards in hand. Drawing " ^
-                         string_of_int num_to_draw ^ ".") in
-        gs.h_hand <- fst result;
-        gs.deck <- snd result
-      else ());
-      if gs.h_hand = []
-      then
-        let () = print_endline (player_to_string p ^ ": Deck is empty. :(") in
-        (print_endline "--------------------------------------------------");
-        turn AI1 gs
-      else
-        if h_turn gs
-        then let () = check_for_books p gs in turn H gs
-        else let () =
-          (print_endline "--------------------------------------------------");
-           check_for_books p gs in turn AI1 gs
+      (if gs.h_hand = [] then redraw p gs else ());
+      if gs.h_hand = [] then empty_deck_case p gs
+      else next_action (h_turn gs) p gs
     | AI1 ->
-      (if gs.ai1_hand = []
-      then
-        let num_to_draw = min 5 (size gs.deck) in
-        let result = draw_multi [] gs.deck num_to_draw in
-        let () =
-          print_endline (player_to_string p ^ ": No more cards in hand. Drawing " ^
-                         string_of_int num_to_draw ^ ".") in
-        gs.ai1_hand <- fst result;
-        gs.deck <- snd result
-      else ());
-      if gs.ai1_hand = []
-      then
-        let () = print_endline (player_to_string p ^ ": Deck is empty. :(") in
-        (print_endline "--------------------------------------------------");
-        turn AI2 gs
-      else
-        let from_hist = ai_decide gs.ai1_hand (history_to_ranklist p gs.history) in
-        let rank_ask =
-          match from_hist with
-          | None -> choose_random gs.ai1_hand
-          | Some r -> r in
-        if ai_turn p rank_ask gs
-        then let () = check_for_books p gs in turn AI1 gs
-        else let () =
-          (print_endline "--------------------------------------------------");
-           check_for_books p gs in turn AI2 gs
+      (if gs.ai1_hand = [] then redraw p gs else ());
+      if gs.ai1_hand = [] then empty_deck_case p gs
+      else next_action (ai_turn p (get_rank p gs) gs) p gs
     | AI2 ->
-      (if gs.ai2_hand = []
-      then
-        let num_to_draw = min 5 (size gs.deck) in
-        let result = draw_multi [] gs.deck num_to_draw in
-        let () =
-          print_endline (player_to_string p ^ ": No more cards in hand. Drawing " ^
-                         string_of_int num_to_draw ^ ".") in
-        gs.ai2_hand <- fst result;
-        gs.deck <- snd result
-      else ());
-      if gs.ai2_hand = []
-      then
-        let () = print_endline (player_to_string p ^ ": Deck is empty. :(") in
-        (print_endline "--------------------------------------------------");
-        turn AI3 gs
-      else
-        let from_hist = ai_decide gs.ai2_hand (history_to_ranklist p gs.history) in
-        let rank_ask =
-          match from_hist with
-          | None -> choose_random gs.ai2_hand
-          | Some r -> r in
-        if ai_turn p rank_ask gs
-        then let () = check_for_books p gs in turn AI2 gs
-        else let () =
-          (print_endline "--------------------------------------------------");
-           check_for_books p gs in turn AI3 gs
+      (if gs.ai2_hand = [] then redraw p gs else ());
+      if gs.ai2_hand = [] then empty_deck_case p gs
+      else next_action (ai_turn p (get_rank p gs) gs) p gs
     | AI3 ->
-      (if gs.ai3_hand = []
-      then
-        let num_to_draw = min 5 (size gs.deck) in
-        let result = draw_multi [] gs.deck num_to_draw in
-        let () =
-          print_endline (player_to_string p ^ ": No more cards in hand. Drawing " ^
-                         string_of_int num_to_draw ^ ".") in
-        gs.ai3_hand <- fst result;
-        gs.deck <- snd result
-      else ());
-      if gs.ai3_hand = []
-      then
-        let () = print_endline (player_to_string p ^ ": Deck is empty. :(") in
-        (print_endline "--------------------------------------------------");
-        turn H gs
-      else
-        let from_hist = ai_decide gs.ai3_hand (history_to_ranklist p gs.history) in
-        let rank_ask =
-          match from_hist with
-          | None -> choose_random gs.ai3_hand
-          | Some r -> r in
-        if ai_turn p rank_ask gs
-        then let () = check_for_books p gs in turn AI3 gs
-        else let () =
-          (print_endline "--------------------------------------------------");
-           check_for_books p gs in turn H gs
+      (if gs.ai3_hand = [] then redraw p gs else ());
+      if gs.ai3_hand = [] then empty_deck_case p gs
+      else next_action (ai_turn p (get_rank p gs) gs) p gs
+
+(****************************************************************************)
 
 let run (wager : int) : int =
   let () = init_rules () in
