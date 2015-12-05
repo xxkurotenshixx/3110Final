@@ -1,4 +1,3 @@
-module Card = struct
 (*used to represent card suits*)
 type suit = Spades | Diamonds | Hearts | Clubs
 (*used to represent card rank*)
@@ -8,21 +7,21 @@ type rank = Two | Three | Four | Five | Six | Seven | Eight | Nine |
 type card = suit * rank
 
 let card_to_int c =
-  let (s,r) = c in
+  let (_,r) = c in
   match r with
-    | Two   -> 2
-    | Three -> 3
-    | Four  -> 4
-    | Five  -> 5
-    | Six   -> 6
-    | Seven -> 7
-    | Eight -> 8
-    | Nine  -> 9
-    | Ten   -> 10
-    | Jack  -> 11
-    | Queen -> 12
-    | King  -> 13
-    | Ace   -> 1
+  | Two   -> 2
+  | Three -> 3
+  | Four  -> 4
+  | Five  -> 5
+  | Six   -> 6
+  | Seven -> 7
+  | Eight -> 8
+  | Nine  -> 9
+  | Ten   -> 10
+  | Jack  -> 11
+  | Queen -> 12
+  | King  -> 13
+  | Ace   -> 1
 
 let int_to_rank = function
   | 1 -> Ace
@@ -79,14 +78,14 @@ let suit_string = function
 
 let card_to_string c =
   let s,r = c in
-    rank_string r ^ " of " ^ suit_string s
+  rank_string r ^ " of " ^ suit_string s
 
 let string_to_suit = function
-    | "spades" -> Spades
-    | "diamonds" -> Diamonds
-    | "clubs" -> Clubs
-    | "hearts" -> Hearts
-    | _ -> failwith "not a valid input"
+  | "spades" -> Spades
+  | "diamonds" -> Diamonds
+  | "clubs" -> Clubs
+  | "hearts" -> Hearts
+  | _ -> failwith "not a valid input"
 
 let string_to_card s =
   try
@@ -118,5 +117,3 @@ let same_number c1 c2 =
   r1 = r2
 
 let same_card c1 c2 = c1 = c2
-
-end
