@@ -1,4 +1,5 @@
 open Card
+
 type deck = Card.card list
 
 exception Empty

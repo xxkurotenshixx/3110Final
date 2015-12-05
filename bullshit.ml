@@ -57,5 +57,3 @@ let run bet =
   if game_start ()
   then bet
   else -2 * bet
-
-let _ = run 20

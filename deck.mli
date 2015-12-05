@@ -16,15 +16,15 @@ val empty: deck
 (*[new_deck] returns the ordered, standard 52 card deck. *)
 val new_deck: unit -> deck
 
-(* [new_double_deck] returns an ordered deck made of two standard 
+(* [new_double_deck] returns an ordered deck made of two standard
  * 52 card decks. *)
 val new_double_deck: unit -> deck
 
-(* [new_quad_deck] returns an ordered deck made of four standard 
+(* [new_quad_deck] returns an ordered deck made of four standard
  * 52 card decks*)
 val new_quad_deck: unit -> deck
 
-(* [draw deck card] picks a card randomly from the deck and 
+(* [draw deck card] picks a card randomly from the deck and
  * returns the card paired with the deck with that card removed
  * Raises Empty if there are no cards in the deck *)
 val draw: deck -> Card.card * deck

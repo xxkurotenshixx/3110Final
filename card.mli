@@ -1,4 +1,3 @@
-(*used to represent card suits*)
 type suit = Spades | Diamonds | Hearts | Clubs
 (*used to represent card rank*)
 type rank = Two | Three | Four | Five | Six | Seven | Eight | Nine |
@@ -9,7 +8,7 @@ type card = suit * rank
 (* [card_to_string card] returns a string representation of the card *)
 val card_to_string: card -> string
 
-(* [same_number card1 card 2] takes two cards and returns whether they 
+(* [same_number card1 card 2] takes two cards and returns whether they
  * have the same number. *)
 val same_number: card -> card -> bool
 
@@ -37,6 +36,6 @@ val string_to_suit: string -> suit
 (* [int_to_str n] converts the number n to a string. *)
 val int_to_str: int -> string
 
-(* [same_card card1 card2] checks to see whether or not card1 and card2 
+(* [same_card card1 card2] checks to see whether or not card1 and card2
  * have both the same suit and rank. *)
 val same_card: card -> card -> bool

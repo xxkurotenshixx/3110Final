@@ -66,5 +66,3 @@ let run money =
     (get_wallet s)
   else
     money
-
-let _ = run 500
