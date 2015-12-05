@@ -12,7 +12,7 @@ val remove_cards: Card.card list -> Card.card list -> Card.card list
 (* Checks if the player lied or not and updates the state accordingly. *)
 val check_bs: state -> Card.card list -> int -> Card.rank -> int -> bool*state
 
-(* Updates the state after a player makes their play. *)
+(* Updates the state after a player finishes their turn. *)
 val no_bs: Card.card list -> state -> state
 
 (* Indicates if the AI won. *)
