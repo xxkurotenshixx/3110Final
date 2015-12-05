@@ -2,7 +2,8 @@
  * player currently has.*)
 val start: int -> bool
 
-(* Returns how much the player bets. *)
+(* Returns how much the player bets. Throws an exception if the
+ * player quits. *)
 val bid: int -> int
 
 (* Returns true if the player hits, false if the player stands.
