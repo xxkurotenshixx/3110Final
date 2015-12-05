@@ -17,7 +17,7 @@ type game_state =
    mutable history : (rank * player) list;
    mutable deck : deck}
 
-(* Helper functions *)
+(* Conversion Helper functions *)
 (***************************************************************************)
 (* Returns the string associated with the player p *)
 let player_to_string p =
@@ -43,7 +43,17 @@ let rank_to_string r =
   | Jack -> "Jacks"
   | Queen -> "Queens"
   | King -> "Kings"
+  
+(* Returns the list of ranks in h *)
+let rec history_to_ranklist self h =
+  match h with
+  | (rank, player)::t ->
+    if player <> self then rank::(history_to_ranklist self t)
+    else history_to_ranklist self t
+  | [] -> []
 
+(* Printing Helper functions *)
+(***************************************************************************)
 (* Prints the human player's hand *)
 let print_hand p gs : unit =
   let rec iterator hand =
@@ -89,21 +99,8 @@ let omniscient gs : unit =
   print_deck_size gs;
   print_endline( "********************************************************")
 
-(* Returns the tuple ([n drawn cards], updated deck) *)
-let rec draw_multi (acc:card list) (draw_pile:deck) n : (card list * deck) =
-    if n = 0 then (acc, draw_pile)
-    else
-      let draw_result = draw draw_pile in
-      draw_multi ((fst draw_result)::acc) (snd draw_result) (n - 1)
-
-(* Adds or updates (rank, player) to the request history *)
-let rec add_to_history (rank, player) history gs acc =
-  match history with
-  | [] -> gs.history <- ((rank, player)::gs.history)
-  | (r, p):: t ->
-    if rank = r then gs.history <- (acc @ [(rank, player)] @ t)
-    else add_to_history (rank, player) t gs ((r, p)::acc)
-
+(* Initialization Helper functions *)
+(***************************************************************************)
 (* Returns the initial game_state *)
 let init_gs () : game_state =
   let h_result = draw_multi [] new_deck 5 in
@@ -128,6 +125,15 @@ Play continues until all hands are empty and there are no more cards to draw fro
 
 You will be playing with Walker, David, and Mike. Have fun!\n--------------------------------------------------\n")
 
+(* Draw-based Helper functions *)
+(***************************************************************************)
+(* Returns the tuple ([list of n drawn cards], updated deck) *)
+let rec draw_multi (acc:card list) (draw_pile:deck) n : (card list * deck) =
+    if n = 0 then (acc, draw_pile)
+    else
+      let draw_result = draw draw_pile in
+      draw_multi ((fst draw_result)::acc) (snd draw_result) (n - 1)
+      
 (* Makes p draw 5 cards. Updates gs accordingly. *)
 let redraw p gs =
   let num_to_draw = min 5 (size gs.deck) in
@@ -141,6 +147,16 @@ let redraw p gs =
   | AI1 -> gs.ai1_hand <- fst result
   | AI2 -> gs.ai2_hand <- fst result
   | AI3 -> gs.ai3_hand <- fst result
+
+(* Between-a-turn Helper functions *)
+(***************************************************************************)
+(* Adds or updates (rank, player) to the request history *)
+let rec add_to_history (rank, player) history gs acc =
+  match history with
+  | [] -> gs.history <- ((rank, player)::gs.history)
+  | (r, p):: t ->
+    if rank = r then gs.history <- (acc @ [(rank, player)] @ t)
+    else add_to_history (rank, player) t gs ((r, p)::acc)
 
 (* Checks if player p has books in their hand and updates gs accordingly *)
 let check_for_books (p : player) (gs : game_state) : unit =
@@ -234,15 +250,8 @@ let check_for_books (p : player) (gs : game_state) : unit =
     if gs.ai3_hand = [] then redraw p gs else ());
   if num_new_books > 0 then print_books gs else ()
 
-
-(* Returns the list of ranks in h *)
-let rec history_to_ranklist self h =
-  match h with
-  | (rank, player)::t ->
-    if player <> self then rank::(history_to_ranklist self t)
-    else history_to_ranklist self t
-  | [] -> []
-
+(* During-a-turn Helper functions *)
+(***************************************************************************)
 (* Performs a transfer rank_wanted from target to asker.
    Returns true iff cards were transfered. *)
 let transfer asker target rank_wanted gs =
