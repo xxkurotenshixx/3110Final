@@ -1,6 +1,6 @@
 open Card
 
-(* [call_bsp()] checks each AI to see if bs is called. If bs is called, then
+(* [call_bsp] checks each AI to see if bs is called. If bs is called, then
  * then it returns a pair containing the bool true and the AI which called 
  * bullshit. Otherwise it returns false and 0. *)
 val call_bsp: unit -> bool*int
