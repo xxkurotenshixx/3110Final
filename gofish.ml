@@ -126,7 +126,7 @@ let redraw p gs =
 (***************************************************************************)
 (* Returns the initial game_state *)
 let init_gs () : game_state =
-  let h_result = draw_multi [] new_deck 5 in
+  let h_result = draw_multi [] (new_deck ()) 5 in
   let ai1_result = draw_multi [] (snd h_result) 5 in
   let ai2_result = draw_multi [] (snd ai1_result) 5 in
   let ai3_result = draw_multi [] (snd ai2_result) 5 in
