@@ -43,7 +43,7 @@ let rank_to_string r =
   | Jack -> "Jacks"
   | Queen -> "Queens"
   | King -> "Kings"
-  
+
 (* Returns the list of ranks in h *)
 let rec history_to_ranklist self h =
   match h with
@@ -99,6 +99,29 @@ let omniscient gs : unit =
   print_deck_size gs;
   print_endline( "********************************************************")
 
+(* Draw-based Helper functions *)
+(***************************************************************************)
+(* Returns the tuple ([list of n drawn cards], updated deck) *)
+let rec draw_multi (acc:card list) (draw_pile:deck) n : (card list * deck) =
+    if n = 0 then (acc, draw_pile)
+    else
+      let draw_result = draw draw_pile in
+      draw_multi ((fst draw_result)::acc) (snd draw_result) (n - 1)
+
+(* Makes p draw 5 cards. Updates gs accordingly. *)
+let redraw p gs =
+  let num_to_draw = min 5 (size gs.deck) in
+  let result = draw_multi [] gs.deck num_to_draw in
+  let () =
+      print_endline (player_to_string p ^": No more cards in hand. Drawing "
+                     ^ string_of_int num_to_draw ^ ".") in
+  gs.deck <- snd result;
+  match p with
+  | H -> gs.h_hand <- fst result
+  | AI1 -> gs.ai1_hand <- fst result
+  | AI2 -> gs.ai2_hand <- fst result
+  | AI3 -> gs.ai3_hand <- fst result
+
 (* Initialization Helper functions *)
 (***************************************************************************)
 (* Returns the initial game_state *)
@@ -116,37 +139,10 @@ let init_gs () : game_state =
 let init_rules () : unit =
   print_endline
   ("\nplayers take turns asking a specific player for a given rank of card. If someone asks you for a rank that you have, the cards are taken from your hand. if you do not have any cards of that rank, your opponent must go fish, taking one new card from the pile of cards.
-
 When it’s your turn, select a player you think might have a needed card. Pick one card from your hand of the desired rank. If the player has the desired card, he or she must pass it over. If not, you must go fish. If you get the card you asked for, you get to go again.
-
 If you run out of cards and there are still cards left, you get five free cards.
-
 Play continues until all hands are empty and there are no more cards to draw from. The winner is the player with the most points at the end of the game. Rules were found on: http://www.hoylegaming.com/rules/showrule.aspx?RuleID=214
-
 You will be playing with Walker, David, and Mike. Have fun!\n--------------------------------------------------\n")
-
-(* Draw-based Helper functions *)
-(***************************************************************************)
-(* Returns the tuple ([list of n drawn cards], updated deck) *)
-let rec draw_multi (acc:card list) (draw_pile:deck) n : (card list * deck) =
-    if n = 0 then (acc, draw_pile)
-    else
-      let draw_result = draw draw_pile in
-      draw_multi ((fst draw_result)::acc) (snd draw_result) (n - 1)
-      
-(* Makes p draw 5 cards. Updates gs accordingly. *)
-let redraw p gs =
-  let num_to_draw = min 5 (size gs.deck) in
-  let result = draw_multi [] gs.deck num_to_draw in
-  let () =
-      print_endline (player_to_string p ^": No more cards in hand. Drawing "
-                     ^ string_of_int num_to_draw ^ ".") in
-  gs.deck <- snd result;
-  match p with
-  | H -> gs.h_hand <- fst result
-  | AI1 -> gs.ai1_hand <- fst result
-  | AI2 -> gs.ai2_hand <- fst result
-  | AI3 -> gs.ai3_hand <- fst result
 
 (* Between-a-turn Helper functions *)
 (***************************************************************************)
